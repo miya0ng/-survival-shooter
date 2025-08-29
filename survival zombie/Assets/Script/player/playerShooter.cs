@@ -34,8 +34,8 @@ public class PlayerShooter : MonoBehaviour
         //gunRb.linearVelocity = Vector3.zero;
         //gunRb.angularVelocity = Vector3.zero;
 
-        gunRb.isKinematic = false;
-        gunCollider.enabled = true;
+        //gunRb.isKinematic = false;
+        //gunCollider.enabled = true;
     }
 
     private void Update()
