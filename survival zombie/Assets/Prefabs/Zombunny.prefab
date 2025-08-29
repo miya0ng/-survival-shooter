@@ -106,6 +106,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce2a79bab737424fa68a3f041cb884d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 100
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
+  player: {fileID: 426185540368103601, guid: d9c17479604ee394a86f5293e339f0aa, type: 3}
+  target: {fileID: 426185540368065679, guid: d9c17479604ee394a86f5293e339f0aa, type: 3}
+  zombieAttackClip: {fileID: 8300000, guid: 02e6208ec76314158a9f548f51fe9f11, type: 3}
+  smog: {fileID: 19800000, guid: ef39ae7291c751249b296f00bf6fb042, type: 3}
