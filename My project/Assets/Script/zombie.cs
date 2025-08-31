@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class zombie : LivingEntity, IDamagable
 {
@@ -24,12 +25,14 @@ public class zombie : LivingEntity, IDamagable
     public Transform target;
 
     private float lastAttackTime;
-    private float attackDelay;
+    private float attackDelay = 2f;
     private float damage = 10;
 
     private AudioSource audioSource;
     public AudioClip zombieAttackClip;
     public ParticleSystem smog;
+
+    private bool isAttacking;
 
     private bool sinking;
 
@@ -119,8 +122,6 @@ public class zombie : LivingEntity, IDamagable
         animator.SetTrigger(DieHash);
         animator.SetBool(targetHash, false);
         Destroy(gameObject, 3f);
-
-
     }
     public void StartSinking()
     {

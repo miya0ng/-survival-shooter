@@ -6,8 +6,13 @@ using UnityEngine.SceneManagement;
 public class uiHud : MonoBehaviour
 {
     GameManager gameManager;
+
     public TextMeshProUGUI scoreText;
-    
+
+    public Slider playerHpBar;
+
+    public float fillamount;
+
     public GameObject popUp;
     
     
