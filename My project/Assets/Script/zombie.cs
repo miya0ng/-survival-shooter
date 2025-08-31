@@ -8,7 +8,7 @@ using UnityEngine.Audio;
 
 public class zombie : LivingEntity, IDamagable
 {
-
+    private GameManager gameManager;
     private static readonly int DieHash = Animator.StringToHash("Die");
     private static readonly int targetHash = Animator.StringToHash("HasTarget");
 
@@ -35,6 +35,7 @@ public class zombie : LivingEntity, IDamagable
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
+        gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
     }
 
     protected override void OnEnable()
@@ -44,8 +45,20 @@ public class zombie : LivingEntity, IDamagable
     private void Update()
     {
         target = FindTarget(traceDist);
-        agent.SetDestination(target.position);
-        AttackPlayer();
+
+        if (target != null)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(target.position);
+            animator.SetBool(targetHash, true);
+
+            AttackPlayer();
+        }
+        else
+        {
+            agent.isStopped = true;
+            animator.SetBool(targetHash, false);
+        }
 
         Debug.Log($"zombie health: {Health}");
     }
@@ -75,31 +88,24 @@ public class zombie : LivingEntity, IDamagable
 
     protected Transform FindTarget(float radius)
     {
-        var colliders = Physics.OverlapSphere(transform.position, radius, targetLayer.value);
+        var colliders = Physics.OverlapSphere(transform.position, radius, targetLayer);
+
         if (colliders.Length == 0)
         {
-            return null;
-        }
-   
-        var target = colliders.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).First();
-
-        if( Vector3.Distance(transform.position, target.transform.position) <= traceDist)
-        {
-            agent.isStopped = false;
-            animator.SetBool(targetHash, true);
-        }
-        else
-        {
-            agent.isStopped = true;
-            animator.SetBool(targetHash, false);
+            return null; // 못 찾으면 null
         }
 
-        return target.transform;
+        var nearest = colliders
+            .OrderBy(x => Vector3.Distance(x.transform.position, transform.position))
+            .First();
+
+        return nearest.transform;
     }
 
     protected override void Die()
     {
         base.Die();
+        gameManager.AddScore(10);
         OnDeath += () => Debug.Log("zombie Died");
         agent.isStopped = true;
         animator.SetTrigger(DieHash);

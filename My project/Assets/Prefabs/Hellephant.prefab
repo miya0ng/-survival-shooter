@@ -55,7 +55,7 @@ PrefabInstance:
     - target: {fileID: 9500000, guid: b77f122f451a2394898a24191c26107c, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: a6fc8561a7834d84eb69bc9f34ac4755, type: 2}
+      objectReference: {fileID: 9100000, guid: d38d36c757614834cbcec4c24b195026, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
-  animator: {fileID: 5645129904544646061, guid: a10ee1ce32795634ca9447d1abde9057, type: 3}
+  animator: {fileID: 0}
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
