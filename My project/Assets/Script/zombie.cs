@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Audio;
+using UnityEngine.UIElements;
 
 public class zombie : LivingEntity, IDamagable
 {
@@ -30,12 +31,15 @@ public class zombie : LivingEntity, IDamagable
     public AudioClip zombieAttackClip;
     public ParticleSystem smog;
 
+    private bool sinking;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>();
         gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
+       
     }
 
     protected override void OnEnable()
@@ -59,6 +63,9 @@ public class zombie : LivingEntity, IDamagable
             agent.isStopped = true;
             animator.SetBool(targetHash, false);
         }
+
+        if (sinking)
+            transform.Translate(Vector3.down * 2f * Time.deltaTime, Space.World);
 
         Debug.Log($"zombie health: {Health}");
     }
@@ -105,16 +112,29 @@ public class zombie : LivingEntity, IDamagable
     protected override void Die()
     {
         base.Die();
+
         gameManager.AddScore(10);
         OnDeath += () => Debug.Log("zombie Died");
         agent.isStopped = true;
         animator.SetTrigger(DieHash);
         animator.SetBool(targetHash, false);
         Destroy(gameObject, 3f);
+
+
     }
     public void StartSinking()
     {
-        //Destroy(gameObject, 3f);
+        if (agent) agent.enabled = false;
+
+        var rb = GetComponent<Rigidbody>();
+        if (rb)
+        {
+            rb.isKinematic = true;
+            rb.detectCollisions = false;
+        }
+
+        sinking = true;
+        Destroy(gameObject, 5f);
     }
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
